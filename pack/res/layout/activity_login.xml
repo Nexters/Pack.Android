@@ -90,6 +90,20 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/action_sign_in"
                     android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/profileImgView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/kakao_account_logo" />
+				
+				<com.kakao.widget.LoginButton
+			        android:id="@+id/com_kakao_login"
+			        android:layout_width="match_parent"
+			        android:layout_height="match_parent"
+			      	android:layout_gravity="center"
+			        android:layout_marginTop="30dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

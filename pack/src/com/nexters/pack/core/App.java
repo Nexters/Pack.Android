@@ -29,13 +29,7 @@ public class App extends Application {
 	public static final int SERVER_PRODUCTION = 1;
 	public static final int SERVER_TARGET = SERVER_TEST;
 
-    public static final String VOICE = "voice";
-	public static final String IMAGE = "image";
-    public static final String LIMIT = "limit";
-    public static final String TUTORIAL = "tutorial";
-
-    public static final String TAG = "VOBBLE";
-    public static final String NMAP_API_KEY = "9d613b3fed909e86f46be79aae114235";
+    public static final String TAG = "PACK";
 
 
     public static void log(String msg) {
@@ -48,6 +42,7 @@ public class App extends Application {
 
 	@Override
 	public void onCreate() {
+		log("App On Create");
 		super.onCreate();
 		mGa = GoogleAnalytics.getInstance(this);
 	    mTracker = mGa.getTracker(GA_PROPERTY_ID);
