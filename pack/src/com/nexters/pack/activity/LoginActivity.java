@@ -43,7 +43,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 		
 		initResources();
@@ -65,7 +64,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 	
 	private void initResources() {
         mEtEmail = (EditText) findViewById(R.id.et_sign_in_email);
+        if(App.SERVER_TARGET == App.SERVER_TEST)
+        	mEtEmail.setText("test@gmail.com");
         mEtPassword = (EditText) findViewById(R.id.et_sign_in_password);
+        if(App.SERVER_TARGET == App.SERVER_TEST)
+        	mEtPassword.setText("12341234");
         mBtnSignIn = (Button) findViewById(R.id.btn_sign_in);
         loginButton = (LoginButton) findViewById(R.id.com_kakao_login);
         
@@ -126,6 +129,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
     
     protected void onSessionOpened(){
+    	loginButton.setVisibility(View.INVISIBLE);
     	requestMe();
     }
     
@@ -205,7 +209,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         public void onSessionClosed(final KakaoException exception) {
             // 프로그레스바를 보이고 있었다면 중지하고 세션 오픈을 못했으니 다시 로그인 버튼 노출.
             loginButton.setVisibility(View.VISIBLE);
-            App.log("onSessionClosed");
         }
 
     }

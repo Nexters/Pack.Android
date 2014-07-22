@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 	
 	private static int INTRO_LOADING_TIME = 2000;
     private Handler mHandler = null;

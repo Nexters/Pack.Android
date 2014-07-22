@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Text">
+        <attr name="font_name" format="string" />
+        <attr name="letter_spacing" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="Layout">
+        <attr name="aspect_ratio" format="float" />
+    </declare-styleable>
+</resources>

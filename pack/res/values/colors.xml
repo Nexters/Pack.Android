@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_background">#EEEEEE</color>
+    <color name="window_actionbar_background">#6ca9e7</color>
+    <color name="window_title_text">#FFFFFF</color>
+</resources>
