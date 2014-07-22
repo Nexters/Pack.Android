@@ -4,10 +4,12 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,7 +34,7 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseSherlockActivity implements View.OnClickListener {
 	private EditText mEtEmail;
     private EditText mEtPassword;
     private Button mBtnSignIn;
@@ -42,8 +44,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_background));
 		
 		initResources();
         initEvents();
@@ -112,7 +116,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(JSONObject response) {
                 //AccountManager.getInstance().signIn(SignInActivity.this, User.build(response));
             	App.log(response.toString());
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, StationActivity.class);
                 startActivity(intent);
                 setResult(RESULT_OK, null);
                 finish();
