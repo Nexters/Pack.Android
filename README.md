@@ -1,11 +1,14 @@
 ###Pack Your Tips Android.
 
 ## TODO
-- [x] KakaoLogin
-- [x] 이미지 다운로드
-- [] 메인화면 리스트뷰
-- [] 이미지 블러
-- [] 맵뷰 마커
+* - [x] KakaoLogin
+* - [x] 이미지 다운로드
+* - [x] 액션바
+* - [ ] 메인화면
+* - [ ] 역화면
+* - [ ] 검색화면
+* - [ ] 이미지 블러
+* - [ ] 맵뷰 마커
 
 
 ## Dependencies
