@@ -1,5 +1,7 @@
 package com.nexters.pack.network;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -13,7 +15,7 @@ import com.nexters.pack.core.App;
 
 public class APIResponseHandler extends JsonHttpResponseHandler {
 	private AlertDialog alertDialog;
-	public static final String CODE_SUCCESS = "1";
+	public static final String CODE_SUCCESS = "0";
 	
 	private Context context;
 	public APIResponseHandler(Context context) {
@@ -48,10 +50,22 @@ public class APIResponseHandler extends JsonHttpResponseHandler {
 			onCompletelyFinish();
 		}
 	}
-
+	@Override
+	public void onFailure ( Throwable e, JSONObject errorResponse ) {
+		if( alertDialog != null && alertDialog.isShowing() ) return;
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(R.string.error_cannot_connect_network);
+        builder.setPositiveButton(R.string.ok, null);
+        
+        alertDialog = builder.create();
+        alertDialog.show();
+		onCompletelyFinish();
+		if(errorResponse != null)
+			App.log(errorResponse.optString("msg"));
+	}
 	@Override
 	public void onFailure(Throwable error, String response) {
-		// ������ 404 500 ��������� ��������� ������
 		StringBuilder errorMessageBuilder = new StringBuilder();
 		if(!TextUtils.isEmpty(response)) {
 			errorMessageBuilder.append(response).append("\n");
@@ -73,19 +87,32 @@ public class APIResponseHandler extends JsonHttpResponseHandler {
 		App.log(errorMessageBuilder.toString().trim());
 	}
 	@Override
-	public void onFailure ( Throwable e, JSONObject errorResponse ) {
-		if( alertDialog != null && alertDialog.isShowing() ) return;
-    	
-    	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(R.string.error_cannot_connect_network);
-        builder.setPositiveButton(R.string.ok, null);
-        
-        alertDialog = builder.create();
-        alertDialog.show();
-		onCompletelyFinish();
-		if(errorResponse != null)
-			App.log(errorResponse.optString("msg"));
+	public void onFailure(Throwable e) {
+		onFailure(e, "");
 	}
+	@Override
+	public void onFailure(int statusCode, Throwable e, JSONObject errorResponse) {
+		onFailure(e, errorResponse);
+	}
+	@Override
+	public void onFailure(int statusCode, Header[] headers, Throwable e,
+			JSONObject errorResponse) {
+		onFailure(statusCode, e, errorResponse);
+	}
+	@Override
+	public void onFailure(Throwable e, JSONArray errorResponse) {
+		onFailure(e);
+	}
+	@Override
+	public void onFailure(int statusCode, Throwable e, JSONArray errorResponse) {
+		onFailure(e, errorResponse);
+	}
+	@Override
+	public void onFailure(int statusCode, Header[] headers, Throwable e,
+			JSONArray errorResponse) {
+		onFailure(statusCode, e, errorResponse);
+	}
+	
 	
 	public void onCompletelyFinish() {}
 }

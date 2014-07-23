@@ -15,8 +15,11 @@ import android.provider.BaseColumns;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,24 +28,41 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.nexters.pack.R;
+import com.nexters.pack.core.App;
 
 public class StationActivity extends BaseSherlockActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initResources();
+        initEvents();
 		
+	}
+	private void initResources(){
 		FadingActionBarHelper helper = new FadingActionBarHelper()
-	        .actionBarBackground(R.color.window_actionbar_background)
-	        .headerLayout(R.layout.header)
-	        .contentLayout(R.layout.activity_station)
-	        .headerOverlayLayout(R.layout.header_overlay);
+        .actionBarBackground(R.color.window_actionbar_background)
+        .headerLayout(R.layout.header)
+        .contentLayout(R.layout.activity_station)
+        .headerOverlayLayout(R.layout.header_overlay);
+		
 	    setContentView(helper.createView(this));
 	    helper.initActionBar(this);
 	    
 	    ListView listView = (ListView) findViewById(android.R.id.list);
-        ArrayList<String> items = loadItems(R.raw.nyc_sites);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(adapter);
+	    ArrayList<String> items = loadItems(R.raw.nyc_sites);
+	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+	    listView.setAdapter(adapter);
+	}
+	private void initEvents(){
+		ImageButton button = (ImageButton)findViewById(R.id.header_imagebutton);
+	    button.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	private SuggestionsAdapter mSuggestionsAdapter;
 	private static final String[] COLUMNS = {

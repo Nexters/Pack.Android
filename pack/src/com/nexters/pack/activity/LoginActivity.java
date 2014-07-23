@@ -35,19 +35,19 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 
 public class LoginActivity extends BaseSherlockActivity implements View.OnClickListener {
-	private EditText mEtEmail;
-    private EditText mEtPassword;
-    private Button mBtnSignIn;
+	private EditText emailEt;
+    private EditText passwordEt;
+    private Button signInBtn;
+    private Button signUpBtn;
     
     private LoginButton loginButton;
     private final SessionCallback mySessionCallback = new MySessionStatusCallback();
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(R.style.Theme_Sherlock_Light);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_background));
+		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_background_light));
 		
 		initResources();
         initEvents();
@@ -67,19 +67,21 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
     }
 	
 	private void initResources() {
-        mEtEmail = (EditText) findViewById(R.id.et_sign_in_email);
+		emailEt = (EditText) findViewById(R.id.et_sign_in_email);
         if(App.SERVER_TARGET == App.SERVER_TEST)
-        	mEtEmail.setText("test@gmail.com");
-        mEtPassword = (EditText) findViewById(R.id.et_sign_in_password);
+        	emailEt.setText("test@gmail.com");
+        passwordEt = (EditText) findViewById(R.id.et_sign_in_password);
         if(App.SERVER_TARGET == App.SERVER_TEST)
-        	mEtPassword.setText("12341234");
-        mBtnSignIn = (Button) findViewById(R.id.btn_sign_in);
+        	passwordEt.setText("12341234");
+        signInBtn = (Button) findViewById(R.id.btn_sign_in);
+        signUpBtn = (Button) findViewById(R.id.btn_sign_up);
         loginButton = (LoginButton) findViewById(R.id.com_kakao_login);
         
     }
 
     private void initEvents() {
-        mBtnSignIn.setOnClickListener(this);
+    	signInBtn.setOnClickListener(this);
+        signUpBtn.setOnClickListener(this);
         loginButton.setLoginSessionCallback(mySessionCallback);
     }
     
@@ -88,7 +90,10 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
         	case R.id.btn_sign_in:
         		login();
         		break;
-        }
+        	case R.id.btn_sign_up:
+        		signUp();
+        		break;
+		}
 	}
 	
 	private void login(){
@@ -114,8 +119,7 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 
             @Override
             public void onSuccess(JSONObject response) {
-                //AccountManager.getInstance().signIn(SignInActivity.this, User.build(response));
-            	App.log(response.toString());
+            	super.onSuccess(response);
                 Intent intent = new Intent(LoginActivity.this, StationActivity.class);
                 startActivity(intent);
                 setResult(RESULT_OK, null);
@@ -123,13 +127,16 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             }
         });
 	}
-	
+	private void signUp(){
+		Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(intent);
+	}
 	private String getPassword() {
-        return mEtPassword.getText().toString();
+        return passwordEt.getText().toString();
     }
 
     private String getEmail() {
-        return mEtEmail.getText().toString();
+        return emailEt.getText().toString();
     }
     
     protected void onSessionOpened(){

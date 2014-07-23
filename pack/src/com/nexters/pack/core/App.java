@@ -42,7 +42,6 @@ public class App extends Application {
 
 	@Override
 	public void onCreate() {
-		log("App On Create");
 		super.onCreate();
 		mGa = GoogleAnalytics.getInstance(this);
 	    mTracker = mGa.getTracker(GA_PROPERTY_ID);

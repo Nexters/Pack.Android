@@ -13,5 +13,5 @@ public class URL {
 		}
 	}
 	public static final String SIGN_IN = getBaseUrl() + "/login";
-
+	public static final String SIGN_UP = getBaseUrl() + "/register";
 }
