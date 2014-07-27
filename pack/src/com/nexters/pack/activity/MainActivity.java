@@ -1,79 +1,94 @@
 package com.nexters.pack.activity;
 
-import java.util.ArrayList;
-
-import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.util.Log;
 
-import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nexters.pack.R;
-import com.nexters.pack.util.MainItem;
 
-public class MainActivity extends BaseSherlockActivity {
+public class MainActivity extends SherlockFragmentActivity implements OnMapClickListener{
 
+	GoogleMap ggMap;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initResources();
 	}
-	
-	private void initResources(){
-		FadingActionBarHelper helper = new FadingActionBarHelper()
-        .actionBarBackground(R.color.window_actionbar_background)
-        .headerLayout(R.layout.header)
-        .contentLayout(R.layout.activity_main)
-        .headerOverlayLayout(R.layout.header_overlay);
+
+	private void initResources() {
+
+//		 FadingActionBarHelper helper = new FadingActionBarHelper()
+//		 .actionBarBackground(R.color.window_actionbar_background)
+//		 .headerLayout(R.layout.map)
+//		 .contentLayout(R.layout.activity_main);
+//		
+//		 setContentView(helper.createView(this));
+//		 helper.initActionBar(this);
+		setContentView(R.layout.activity_main);
+		initMap();
 		
-	    setContentView(helper.createView(this));
-	    helper.initActionBar(this);
-	    
-	    ListView listView = (ListView) findViewById(R.id.main_list);
-	    ArrayList<MainItem> items = setTempItem();//�ӽ� ������
-	    MainItemAdapter adapter = new MainItemAdapter(this, R.layout.main_item, items);
-	    listView.setAdapter(adapter);
+
 	}
 	
-	private ArrayList<MainItem> setTempItem() {
-		ArrayList<MainItem> item = new ArrayList<MainItem>();
-		item.add(new MainItem("ù��", R.drawable.abs__ic_menu_share_holo_dark));
-		item.add(new MainItem("����", R.drawable.abs__ab_bottom_solid_inverse_holo));
-		return item;
+	private void initMap() {
+		String coordinates[] = { "37.517180", "127.041268" };
+		double lat = Double.parseDouble(coordinates[0]);
+		double lng = Double.parseDouble(coordinates[1]);
+
+
+		LatLng position = new LatLng(lat, lng);
+		GooglePlayServicesUtil.isGooglePlayServicesAvailable(MainActivity.this);
+
+		ggMap = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.map)).getMap();
+		
+		// 터치이벤트 설정 
+		ggMap.setOnMapClickListener(this);
+		
+		// 맵 위치이동.
+		ggMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+
+		// 마커 설정.
+		ggMap.addMarker(
+				new MarkerOptions().position(position).title("제목"))
+				.showInfoWindow();
+
+		// 마커 클릭 리스너
+		ggMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+			public boolean onMarkerClick(Marker marker) {
+
+				return false;
+			}
+		});		
+	}
+	/* Map 클릭시 터치 이벤트 
+	 * @see com.google.android.gms.maps.GoogleMap.OnMapClickListener#onMapClick(com.google.android.gms.maps.model.LatLng)
+	 */
+	public void onMapClick(LatLng point) {
+		
+		// 현재 위도와 경도에서 화면 포인트를 알려준다
+		Point screenPt = ggMap.getProjection().toScreenLocation(point);
+		
+		// 현재 화면에 찍힌 포인트로 부터 위도와 경도를 알려준다.
+		LatLng latLng = ggMap.getProjection().fromScreenLocation(screenPt);
+		
+		//Log.DEBUG(this, "좌표: 위도(" + point.latitude + "), 경도(" + point.longitude + ")", Toast.LENGTH_LONG);
+		//Log.DEBUG(this, "화면좌표: X(" + screenPt.x + "), Y(" + screenPt.y + ")", Toast.LENGTH_LONG);
+		
+		Log.d("맵좌표","좌표: 위도(" + String.valueOf(point.latitude) + "), 경도(" + String.valueOf(point.longitude) + ")");
+		Log.d("화면좌표","화면좌표: X(" + String.valueOf(screenPt.x) + "), Y(" + String.valueOf(screenPt.y) + ")");
 	}
 	
-    private class MainItemAdapter extends ArrayAdapter<MainItem> {
-    	 
-		private ArrayList<MainItem> items;
- 
-        public MainItemAdapter(Context context, int textViewResourceId, ArrayList<MainItem> items) {
-                super(context, textViewResourceId, items);
-                this.items = items;
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-                View v = convertView;
-                if (v == null) {
-                    LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    v = vi.inflate(R.layout.main_item, null);
-                }
-                MainItem mainItem = items.get(position);
-                if (mainItem != null) {
-                        TextView textView = (TextView) v.findViewById(R.id.main_item_tv);
-                        ImageView imageView = (ImageView) v.findViewById(R.id.main_item_iv);
-                        if (textView != null){
-                            textView.setText(mainItem.getText());                            
-                        }
-                        if(imageView != null){
-                                imageView.setBackgroundResource(mainItem.getImage());
-                        }
-                }
-                return v;
-        }
-}
 }
