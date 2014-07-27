@@ -75,7 +75,7 @@ public class StationActivity extends BaseSherlockActivity implements SearchView.
 
         //Create the search view
         SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
-        searchView.setQueryHint("Search for countries…");
+        searchView.setQueryHint("Search for countries");
         searchView.setOnQueryTextListener(this);
         searchView.setOnSuggestionListener(this);
 

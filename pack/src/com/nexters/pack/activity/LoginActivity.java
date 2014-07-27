@@ -120,7 +120,7 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             @Override
             public void onSuccess(JSONObject response) {
             	super.onSuccess(response);
-                Intent intent = new Intent(LoginActivity.this, StationActivity.class);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 setResult(RESULT_OK, null);
                 finish();
