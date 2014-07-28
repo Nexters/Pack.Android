@@ -1,14 +1,11 @@
 package com.nexters.pack.activity;
 
-import com.nexters.pack.R;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
+
+import com.nexters.pack.R;
 
 public class SplashActivity extends BaseActivity {
 	

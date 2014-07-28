@@ -1,6 +1,5 @@
 package com.nexters.pack.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -10,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.nexters.pack.R;
 
-
-public class BaseActivity extends Activity {
-	
+public class BaseSherlockFragmentActivity extends SherlockFragmentActivity{
 	private View mLoadingView;
     private int mLoadingStackCount = 0;
     private AlertDialog mAlertDialog;
@@ -22,7 +20,6 @@ public class BaseActivity extends Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-		
 		mLoadingView = LayoutInflater.from(this).inflate(R.layout.view_loading, null);
 		mLoadingView.setVisibility(View.INVISIBLE);
 	}

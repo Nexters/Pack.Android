@@ -3,16 +3,11 @@ package com.nexters.pack.core;
 import java.io.File;
 
 import android.app.Application;
-import android.content.Context;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.analytics.tracking.android.Tracker;
-import com.nexters.pack.R;
-
 import com.nostra13.universalimageloader.cache.disc.impl.TotalSizeLimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

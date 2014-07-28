@@ -1,14 +1,14 @@
 package com.nexters.pack.view;
 
-import com.nexters.pack.R;
-import com.nexters.pack.util.*;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.nexters.pack.R;
+import com.nexters.pack.util.FontUtil;
 
 
 public class FontTextView extends TextView {

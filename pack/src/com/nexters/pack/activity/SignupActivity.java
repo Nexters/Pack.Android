@@ -2,21 +2,17 @@ package com.nexters.pack.activity;
 
 import org.json.JSONObject;
 
-import com.kakao.widget.LoginButton;
-import com.loopj.android.http.RequestParams;
-import com.nexters.pack.R;
-import com.nexters.pack.core.App;
-import com.nexters.pack.network.APIResponseHandler;
-import com.nexters.pack.network.HttpUtil;
-import com.nexters.pack.network.URL;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.loopj.android.http.RequestParams;
+import com.nexters.pack.R;
+import com.nexters.pack.network.APIResponseHandler;
+import com.nexters.pack.network.HttpUtil;
+import com.nexters.pack.network.URL;
 
 public class SignupActivity extends BaseSherlockActivity implements View.OnClickListener{
 	private EditText emailEt;

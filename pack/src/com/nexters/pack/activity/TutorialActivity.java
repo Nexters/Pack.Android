@@ -1,10 +1,10 @@
 package com.nexters.pack.activity;
 
-import com.nexters.pack.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
+
+import com.nexters.pack.R;
 
 public class TutorialActivity extends Activity {
 	@Override
