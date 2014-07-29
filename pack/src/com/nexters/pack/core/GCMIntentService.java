@@ -1,10 +1,14 @@
 package com.nexters.pack.core;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.nexters.pack.R;
+import com.nexters.pack.activity.MainActivity;
 
 public class GCMIntentService extends GCMBaseIntentService{
 	/**
@@ -25,7 +29,8 @@ public class GCMIntentService extends GCMBaseIntentService{
     	App.log("onMessage : " + arg1);
     }
  
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     protected void onMessage(Context arg0, Intent arg1) {
         // TODO Auto-generated method stub
         /**
@@ -33,7 +38,24 @@ public class GCMIntentService extends GCMBaseIntentService{
          * Notification, 앱 실행 등등 개발자가 하고 싶은 로직을 해당 메소드에서 구현한다.
          * 전달받은 메시지는 Intent.getExtras().getString(key)를 통해 가져올 수 있다.
          */
-    	App.log("onMessage");
+    	
+    	String title = arg1.getStringExtra("title");
+		String message = arg1.getStringExtra("msg");
+		App.log("onMessage title : " + title + " message : " + message);
+    	NotificationManager notificationManager = null;
+    	Notification notification = null;
+    	try {
+    		notificationManager = (NotificationManager) arg0
+    				.getSystemService(Context.NOTIFICATION_SERVICE);
+    		notification = new Notification(R.drawable.ic_launcher,
+    				message, System.currentTimeMillis());
+    		Intent intent = new Intent(arg0, MainActivity.class);
+    		PendingIntent pi = PendingIntent.getActivity(arg0, 0, intent, 0);
+    		notification.setLatestEventInfo(arg0, title, message, pi);
+    		notificationManager.notify(0, notification);
+    	} catch (Exception e) {
+    		App.log("onMessage Exception : " + e.getMessage());
+    	}
     }
  
     @Override
