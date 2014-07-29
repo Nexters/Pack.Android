@@ -34,9 +34,13 @@ public class MainFragment extends BaseSherlockFragment implements OnMapClickList
     private Drawable mActionBarBackgroundDrawable;
     
     private GoogleMap ggMap;
+    
+    
     @Override
 	public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
+    	
+    	
     }
     @Override
 	public View getView(ViewGroup container) {
@@ -97,6 +101,7 @@ public class MainFragment extends BaseSherlockFragment implements OnMapClickList
                 mActionBarBackgroundDrawable.setAlpha(newAlpha);
             }
         });
+        
         initMap();
         return view;
     	
@@ -175,4 +180,5 @@ public class MainFragment extends BaseSherlockFragment implements OnMapClickList
 		});
     	mainListContainer.addView(v);
     }
+    
 }

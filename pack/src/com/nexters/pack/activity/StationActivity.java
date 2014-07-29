@@ -6,10 +6,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v4.widget.CursorAdapter;
@@ -27,13 +31,20 @@ import com.actionbarsherlock.widget.SearchView;
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.nexters.pack.R;
 
-public class StationActivity extends BaseSherlockActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
+public class StationActivity extends BaseSherlockActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener, OnRefreshListener{
+	
+	private PullToRefreshLayout mPullToRefreshLayout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initResources();
         initEvents();
-		
+        
+        mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.ptr_layout);
+        ActionBarPullToRefresh.from(this)
+                .allChildrenArePullable()
+                .listener(this)
+                .setup(mPullToRefreshLayout);
 	}
 	private void initResources(){
 		FadingActionBarHelper helper = new FadingActionBarHelper()
@@ -151,5 +162,32 @@ public class StationActivity extends BaseSherlockActivity implements SearchView.
         } catch (IOException e) {
             return null;
         }
+    }
+    
+    @Override
+    public void onRefreshStarted(View view) {
+        /**
+         * Simulate Refresh with 4 seconds sleep
+         */
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+                // Notify PullToRefreshLayout that the refresh has finished
+                mPullToRefreshLayout.setRefreshComplete();
+            }
+        }.execute();
     }
 }
