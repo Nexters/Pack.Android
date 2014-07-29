@@ -25,7 +25,7 @@ public class SplashActivity extends BaseActivity {
         }, INTRO_LOADING_TIME);
 	}
 	private void endIntro() {
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
 	}

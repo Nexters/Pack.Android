@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.kakao.APIErrorResult;
 import com.kakao.MeResponseCallback;
 import com.kakao.Session;
@@ -46,8 +48,10 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 		setContentView(R.layout.activity_login);
 		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_background_light));
 		
+		startGCM();
 		initResources();
         initEvents();
+        
 	}
 	@Override
 	protected void onResume() {
@@ -219,5 +223,47 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             loginButton.setVisibility(View.VISIBLE);
         }
 
+    }
+    
+    /**
+     * GCM 서비스를 시작한다.
+     */
+    private void startGCM(){
+         
+        /**
+         * GCM Service가 이용 가능한 Device인지 체크한다.
+         * api 8(Android 2.2) 미만인 경우나 GCMService를 이용할 수 없는
+         * 디바이스의 경우 오류를 발생시키니 반드시 예외처리하도록 한다.
+         */
+        try {
+            GCMRegistrar.checkDevice(getApplicationContext());
+        } catch (Exception e) {
+            // TODO: handle exception
+            App.log("This device can't use GCM");
+            return;
+        }
+         
+         
+        /**
+         * 2.SharedPreference에 저장된 RegistrationID가 있는지 확인한다.
+         * 없는 경우 null이 아닌 ""이 리턴
+         */
+        String regId = GCMRegistrar.getRegistrationId(getApplicationContext());
+         
+        /**
+         * Registration Id가 없는 경우(어플리케이션 최초 설치로 발급받은 적이 없거나,
+         * 삭제 후 재설치 등 SharedPreference에 저장된 Registration Id가 없는 경우가 이에 해당한다.)
+         */
+        if(regId == "" || regId == null){
+            /**
+             * 3.RegstrationId가 없는 경우 GCM Server로 Regsitration ID를 발급 요청한다.
+             * 발급 요청이 정상적으로 이루어진 경우 Registration ID는 SharedPreference에 저장되며,
+             * GCMIntentService.class의 onRegistered를 콜백한다.
+             */
+            GCMRegistrar.register(getApplicationContext(), App.PROJECT_ID); 
+        }else{
+        	App.log("Push id : " + regId);
+            //Toast.makeText(getApplicationContext(), "Exist Registration Id: " + regId, Toast.LENGTH_LONG).show();
+        }
     }
 }

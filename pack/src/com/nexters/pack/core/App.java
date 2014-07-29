@@ -25,7 +25,7 @@ public class App extends Application {
 	public static final int SERVER_TARGET = SERVER_TEST;
 
     public static final String TAG = "PACK";
-
+    public static final String PROJECT_ID = "1098004820600";
 
     public static void log(String msg) {
 		log(TAG, msg);

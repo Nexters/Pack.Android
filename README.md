@@ -14,6 +14,7 @@
 * - [ ] 로그인 회원가입 처리
 * - [ ] 메인 숙소정보 가져와서 보여주기
 * - [x] Pull To Refresh
+* - [ ] Gradle 로 포팅~?
 
 ### 7월 4주차
 * - [x] KakaoLogin
