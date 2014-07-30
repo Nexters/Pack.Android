@@ -2,10 +2,12 @@ package com.nexters.pack.activity;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,20 +53,21 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 		startGCM();
 		initResources();
         initEvents();
-        
+        // 세션을 초기화 한다
+        if(Session.initializeSession(this, mySessionCallback)){
+            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
+        	App.log("initializeSession");
+        } else if (Session.getCurrentSession().isOpened()){
+            // 이미 카카오 로그인이 되어있음!
+        	loginButton.setVisibility(View.GONE);
+        	requestMe(false);
+        	App.log("isOpened");
+        }
 	}
 	@Override
 	protected void onResume() {
         super.onResume();
-        // 세션을 초기화 한다
-        if(Session.initializeSession(this, mySessionCallback)){
-            // 1. 세션을 갱신 중이면, 프로그레스바를 보이거나 버튼을 숨기는 등의 액션을 취한다
-            loginButton.setVisibility(View.GONE);
-        } else if (Session.getCurrentSession().isOpened()){
-            // 2. 세션이 오픈된된 상태이면, 다음 activity로 이동한다.
-        	onSessionOpened();
-        }
-            // 3. else 로그인 창이 보인다.
+       
     }
 	
 	private void initResources() {
@@ -121,16 +124,65 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             @Override
             public void onSuccess(JSONObject response) {
             	super.onSuccess(response);
+            	App.setToken(LoginActivity.this, response.optJSONObject("data").optString("token"));
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 setResult(RESULT_OK, null);
                 finish();
             }
+            @Override
+        	public void onFailure(Throwable error, String response) {
+        		App.log("OnFaiure1");
+        		showShortToast( "아이디 비번 확인해라");
+        	}
+            
         });
 	}
 	private void signUp(){
 		Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
         startActivity(intent);
+	}
+	private void checkKakao(final UserProfile userProfile){
+		String url = URL.CHECK;
+		
+		RequestParams params = new RequestParams();
+        params.put("channel", "kakao");
+        params.put("id", userProfile.getId() + "");
+        
+        HttpUtil.post(url, null, params, new APIResponseHandler(LoginActivity.this) {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showLoading();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                hideLoading();
+            }
+
+            @Override
+            public void onSuccess(JSONObject response) {
+            	String code = response.optString("status");
+                if(!TextUtils.isEmpty(code) && code.equals("0")){
+                	// 해당 아이디로 유저가 있음
+                	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    setResult(RESULT_OK, null);
+                    finish();
+                }else{
+                	// 아이디 유저없음 해당 카카오 프로필로 회원가입!
+                	Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                	intent.putExtra("kakao",userProfile);
+                    startActivity(intent);
+                    setResult(RESULT_OK, null);
+                    finish();
+                }
+            	
+            }
+        });
 	}
 	private String getPassword() {
         return passwordEt.getText().toString();
@@ -142,15 +194,14 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
     
     protected void onSessionOpened(){
     	loginButton.setVisibility(View.INVISIBLE);
-    	requestMe();
+    	requestMe(true);
     }
     
-    private void requestMe() {
+    private void requestMe(final boolean changeActivity) {
         UserManagement.requestMe(new MeResponseCallback() {
 
             @Override
             protected void onSuccess(final UserProfile userProfile) {
-                App.log("UserProfile : " + userProfile);
                 userProfile.saveUserToCache();
                 ImageLoader.getInstance().loadImage(userProfile.getProfileImagePath(),  new ImageLoadingListener() {
 
@@ -164,21 +215,25 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 					public void onLoadingFailed(String imageUri, View view,
 							FailReason failReason) {
 						// TODO Auto-generated method stub
-						
+					
 					}
 
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
-						// TODO Auto-generated method stub
 						ImageView profileIV = (ImageView)findViewById(R.id.profileImgView);
 						profileIV.setImageDrawable(new BitmapDrawable(getResources(), loadedImage));
+						App.log("imageUri : " + ImageLoader.getInstance().getDiscCache().get(imageUri));
+						if(changeActivity){
+							checkKakao(userProfile);
+						}
 					}
 
 					@Override
 					public void onLoadingCancelled(String imageUri, View view) {
-						// TODO Auto-generated method stub
-						
+						if(changeActivity){
+							checkKakao(userProfile);
+						}
 					}
                 	
                 });
@@ -187,17 +242,19 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             @Override
             protected void onNotSignedUp() {
             	App.log("onNotSignedUp");
+            	showShortToast("카카오 회원가입이 되어있지 않습니다.");
             }
 
             @Override
             protected void onSessionClosedFailure(final APIErrorResult errorResult) {
             	App.log("onSessionClosedFailure");
+            	showShortToast("카카오 인증에 실패하였습니다.(1)");
             }
 
             @Override
             protected void onFailure(final APIErrorResult errorResult) {
                 String message = "failed to get user info. msg=" + errorResult;
-                App.log(message);
+                showShortToast("카카오 인증에 실패하였습니다.(2)");
                 
             }
         });
@@ -211,6 +268,7 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
         public void onSessionOpened() {
             // 프로그레스바를 보이고 있었다면 중지하고 세션 오픈후 보일 페이지로 이동
         	LoginActivity.this.onSessionOpened();
+        	App.log("onSessionOpened");
         }
 
         /**
@@ -221,6 +279,7 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
         public void onSessionClosed(final KakaoException exception) {
             // 프로그레스바를 보이고 있었다면 중지하고 세션 오픈을 못했으니 다시 로그인 버튼 노출.
             loginButton.setVisibility(View.VISIBLE);
+        	App.log("onSessionClosed");
         }
 
     }

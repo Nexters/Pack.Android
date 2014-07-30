@@ -3,6 +3,8 @@ package com.nexters.pack.core;
 import java.io.File;
 
 import android.app.Application;
+import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.analytics.tracking.android.GoogleAnalytics;
@@ -64,4 +66,13 @@ public class App extends Application {
 	public static void SendTrackingEvent(String category,String action,String label,long value){
 		mTracker.send(MapBuilder.createEvent(category,action,label, null).build());
 	}
+	
+	public static String getToken(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString("token", "");
+    }
+	public static void setToken(Context context,String kakaoId) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("token", kakaoId).commit();
+    }
+    
+
 }
