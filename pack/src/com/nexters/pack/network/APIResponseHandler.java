@@ -61,6 +61,7 @@ public class APIResponseHandler extends JsonHttpResponseHandler {
         alertDialog = builder.create();
         alertDialog.show();
 		onCompletelyFinish();
+		App.log("e : " + e);
 		if(errorResponse != null)
 			App.log(errorResponse.optString("msg"));
 	}

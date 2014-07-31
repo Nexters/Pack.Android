@@ -132,7 +132,6 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             }
             @Override
         	public void onFailure(Throwable error, String response) {
-        		App.log("OnFaiure1");
         		showShortToast( "아이디 비번 확인해라");
         	}
             
@@ -194,7 +193,7 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
     
     protected void onSessionOpened(){
     	loginButton.setVisibility(View.INVISIBLE);
-    	requestMe(true);
+    	requestMe(false);
     }
     
     private void requestMe(final boolean changeActivity) {
@@ -223,7 +222,6 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 							Bitmap loadedImage) {
 						ImageView profileIV = (ImageView)findViewById(R.id.profileImgView);
 						profileIV.setImageDrawable(new BitmapDrawable(getResources(), loadedImage));
-						App.log("imageUri : " + ImageLoader.getInstance().getDiscCache().get(imageUri));
 						if(changeActivity){
 							checkKakao(userProfile);
 						}

@@ -61,7 +61,6 @@ public class SplashActivity extends BaseActivity {
 	            @Override
 	            public void onSuccess(JSONObject response) {
 	            	String code = response.optString("status");
-	            	App.log(response.toString());
 	                if(!TextUtils.isEmpty(code) && code.equals("0") && response.optJSONObject("data") != null){
 	                	// 토큰으로 유저 정보 가져옴 -> 메인
 	                	App.setToken(SplashActivity.this, response.optJSONObject("data").optString("token"));

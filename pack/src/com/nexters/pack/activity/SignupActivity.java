@@ -2,6 +2,8 @@ package com.nexters.pack.activity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -12,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kakao.UserProfile;
-import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.*;
 import com.nexters.pack.R;
 import com.nexters.pack.core.App;
 import com.nexters.pack.network.APIResponseHandler;
@@ -55,7 +57,11 @@ public class SignupActivity extends BaseSherlockActivity implements View.OnClick
         	App.log("kakao id : " + userProfile.getId());
             App.log("kakao nick : " + userProfile.getNickname());
             App.log("kakaoProfileImg : " + ImageLoader.getInstance().getDiscCache().get(userProfile.getThumbnailImagePath()));
-            emailEt.setText(userProfile.getNickname());
+        }
+        if(App.SERVER_TARGET == App.SERVER_TEST){
+        	emailEt.setText("packtest1@gmail.com");
+        	passwordEt.setText("12341234");
+        	passwordConfirmEt.setText("12341234");
         }
 
     }
@@ -82,13 +88,17 @@ public class SignupActivity extends BaseSherlockActivity implements View.OnClick
 	
 	private void signUp(){
 		String url = URL.SIGN_UP;
-		File imageFile = ImageLoader.getInstance().getDiscCache().get(userProfile.getThumbnailImagePath());
+		File imageFile = ImageLoader.getInstance().getDiscCache().get(userProfile.getProfileImagePath());
+
+		//Map<String, String> headers = new HashMap<String, String>();
+		//headers.put("Authorization", String.format("Token token=\"%s\"", user.authenticationToken));
+		//headers.put("Content-Type","multipart/form-data;");
 		
 		RequestParams params = new RequestParams();
         params.put("email", getEmail());
         params.put("password", getPassword());
         params.put("confirmPassword", getPasswordConfirm());
-        
+       
         if( userProfile!= null ){
         	params.put("kakao[id]",userProfile.getId());
         	params.put("kakao[properties][nickname]", userProfile.getNickname());
@@ -100,12 +110,12 @@ public class SignupActivity extends BaseSherlockActivity implements View.OnClick
         	try {
                 params.put("image", imageFile);
             } catch (FileNotFoundException e) {
-            	showShortToast("음성, 사진 파일이 유실되었습니다. 다시 시도해 주세요.");
                 App.log("FileNotFoundException");
                 e.printStackTrace();
                 return;
             }
         }
+        
         
         HttpUtil.post(url, null, params, new APIResponseHandler(SignupActivity.this) {
 
@@ -124,7 +134,11 @@ public class SignupActivity extends BaseSherlockActivity implements View.OnClick
             @Override
             public void onSuccess(JSONObject response) {
             	super.onSuccess(response);
-            	
+            	App.setToken(SignupActivity.this, response.optJSONObject("data").optString("token"));
+                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                startActivity(intent);
+                setResult(RESULT_OK, null);
+                finish();
             }
         });
 	}
