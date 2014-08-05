@@ -1,8 +1,10 @@
 package com.nexters.pack.activity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.kakao.APIErrorResult;
@@ -33,13 +34,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
-
-
-public class LoginActivity extends BaseSherlockActivity implements View.OnClickListener {
-	private EditText emailEt;
-    private EditText passwordEt;
-    private Button signInBtn;
-    private Button signUpBtn;
+public class LoginActivity extends BaseActivity {
     
     private LoginButton loginButton;
     private final SessionCallback mySessionCallback = new MySessionStatusCallback();
@@ -48,7 +43,6 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.ab_background_light));
 		
 		startGCM();
 		initResources();
@@ -59,94 +53,47 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
         	App.log("initializeSession");
         } else if (Session.getCurrentSession().isOpened()){
             // 이미 카카오 로그인이 되어있음!
-        	loginButton.setVisibility(View.GONE);
-        	requestMe(false);
         	App.log("isOpened");
+        	loginButton.setVisibility(View.GONE);
+        	requestMe();
         }
 	}
 	@Override
 	protected void onResume() {
         super.onResume();
-       
     }
 	
 	private void initResources() {
-		emailEt = (EditText) findViewById(R.id.et_sign_in_email);
-        if(App.SERVER_TARGET == App.SERVER_TEST)
-        	emailEt.setText("test@gmail.com");
-        passwordEt = (EditText) findViewById(R.id.et_sign_in_password);
-        if(App.SERVER_TARGET == App.SERVER_TEST)
-        	passwordEt.setText("12341234");
-        signInBtn = (Button) findViewById(R.id.btn_sign_in);
-        signUpBtn = (Button) findViewById(R.id.btn_sign_up);
         loginButton = (LoginButton) findViewById(R.id.com_kakao_login);
         
     }
 
     private void initEvents() {
-    	signInBtn.setOnClickListener(this);
-        signUpBtn.setOnClickListener(this);
         loginButton.setLoginSessionCallback(mySessionCallback);
     }
     
-	public void onClick(View v) {
-		switch (v.getId()) {
-        	case R.id.btn_sign_in:
-        		login();
-        		break;
-        	case R.id.btn_sign_up:
-        		signUp();
-        		break;
-		}
-	}
-	
-	private void login(){
-		String url = URL.SIGN_IN;
-		
-		RequestParams params = new RequestParams();
-        params.put("email", getEmail());
-        params.put("password", getPassword());
-        
-        HttpUtil.post(url, null, params, new APIResponseHandler(LoginActivity.this) {
-
-            @Override
-            public void onStart() {
-                super.onStart();
-                showLoading();
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                hideLoading();
-            }
-
-            @Override
-            public void onSuccess(JSONObject response) {
-            	super.onSuccess(response);
-            	App.setToken(LoginActivity.this, response.optJSONObject("data").optString("token"));
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                setResult(RESULT_OK, null);
-                finish();
-            }
-            @Override
-        	public void onFailure(Throwable error, String response) {
-        		showShortToast( "아이디 비번 확인해라");
-        	}
-            
-        });
-	}
-	private void signUp(){
-		Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-        startActivity(intent);
-	}
 	private void checkKakao(final UserProfile userProfile){
-		String url = URL.CHECK;
+		String url = URL.SIGN_UP;
 		
 		RequestParams params = new RequestParams();
-        params.put("channel", "kakao");
-        params.put("id", userProfile.getId() + "");
+       
+        if( userProfile!= null ){
+        	params.put("kakao[id]",userProfile.getId() + "");
+        	params.put("kakao[properties][nickname]", userProfile.getNickname());
+            params.put("kakao[properties][thumbnail_image]", userProfile.getThumbnailImagePath());
+            params.put("kakao[properties][profile_image]", userProfile.getProfileImagePath());
+        }
+        
+        File imageFile = ImageLoader.getInstance().getDiscCache().get(userProfile.getProfileImagePath());
+        
+        if(imageFile != null){
+        	try {
+                params.put("image", imageFile);
+            } catch (FileNotFoundException e) {
+                App.log("FileNotFoundException");
+                e.printStackTrace();
+            }
+        }
         
         HttpUtil.post(url, null, params, new APIResponseHandler(LoginActivity.this) {
 
@@ -166,37 +113,25 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
             public void onSuccess(JSONObject response) {
             	String code = response.optString("status");
                 if(!TextUtils.isEmpty(code) && code.equals("0")){
-                	// 해당 아이디로 유저가 있음
+                	// 회원가입 성공 & 카카오 아이디로 정보가져옴
                 	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     setResult(RESULT_OK, null);
                     finish();
                 }else{
                 	// 아이디 유저없음 해당 카카오 프로필로 회원가입!
-                	Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                	intent.putExtra("kakao",userProfile);
-                    startActivity(intent);
-                    setResult(RESULT_OK, null);
-                    finish();
+                	showShortToast("가입 실패!!");
                 }
-            	
             }
         });
 	}
-	private String getPassword() {
-        return passwordEt.getText().toString();
-    }
-
-    private String getEmail() {
-        return emailEt.getText().toString();
-    }
     
     protected void onSessionOpened(){
     	loginButton.setVisibility(View.INVISIBLE);
-    	requestMe(false);
+    	requestMe();
     }
     
-    private void requestMe(final boolean changeActivity) {
+    private void requestMe() {
         UserManagement.requestMe(new MeResponseCallback() {
 
             @Override
@@ -220,18 +155,14 @@ public class LoginActivity extends BaseSherlockActivity implements View.OnClickL
 					@Override
 					public void onLoadingComplete(String imageUri, View view,
 							Bitmap loadedImage) {
-						ImageView profileIV = (ImageView)findViewById(R.id.profileImgView);
-						profileIV.setImageDrawable(new BitmapDrawable(getResources(), loadedImage));
-						if(changeActivity){
-							checkKakao(userProfile);
-						}
+						//ImageView profileIV = (ImageView)findViewById(R.id.profileImgView);
+						//profileIV.setImageDrawable(new BitmapDrawable(getResources(), loadedImage));
+						checkKakao(userProfile);
 					}
 
 					@Override
 					public void onLoadingCancelled(String imageUri, View view) {
-						if(changeActivity){
-							checkKakao(userProfile);
-						}
+						checkKakao(userProfile);
 					}
                 	
                 });

@@ -44,7 +44,7 @@ public class SplashActivity extends BaseActivity {
 		if( !TextUtils.isEmpty( App.getToken(SplashActivity.this) )){
 			RequestParams params = new RequestParams();
 	        params.put("channel", "local");
-	        params.put("id", App.getToken(SplashActivity.this));
+	        params.put("token", App.getToken(SplashActivity.this));
 	        
 	        // 토큰이 으로 유저 정보 가져오기
 	        HttpUtil.post(url, null, params, new APIResponseHandler(SplashActivity.this) {
@@ -74,18 +74,14 @@ public class SplashActivity extends BaseActivity {
 		}else{
 			goLogin();
 		}
-		
-		
 	}
 	private void goMain(){
-		App.log("goMain");
 		Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         setResult(RESULT_OK, null);
         finish();
 	}
 	private void goLogin(){
-		App.log("goLogin");
 		Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();

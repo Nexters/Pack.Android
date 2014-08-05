@@ -5,111 +5,21 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.nexters.pack.LoginActivity" >
-
-
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
-
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-       	<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-
-            <LinearLayout
-                android:id="@+id/plus_sign_out_buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:weightSum="2" >
-
-                <Button
-                    android:id="@+id/plus_sign_out_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/plus_sign_out" />
-
-                <Button
-                    android:id="@+id/plus_disconnect_button"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/plus_disconnect" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/email_login_form"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/et_sign_in_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-                <EditText
-                    android:id="@+id/et_sign_in_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-                <Button
-                    android:id="@+id/btn_sign_in"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in"
-                    android:textStyle="bold" />
-                
-				<Button
-                    android:id="@+id/btn_sign_up"
-                    style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="sign up"
-                    android:textStyle="bold" />
-				
-                <ImageView
-                    android:id="@+id/profileImgView"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/kakao_account_logo" />
-				
-				<com.kakao.widget.LoginButton
-			        android:id="@+id/com_kakao_login"
-			        android:layout_width="match_parent"
-			        android:layout_height="match_parent"
-			      	android:layout_gravity="center"
-			        android:layout_marginTop="30dp" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
+	<FrameLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_gravity="center" >
+		<ImageView
+	        android:id="@+id/splash_back"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:src="@drawable/splash_png"/>
+		
+	    <com.kakao.widget.LoginButton
+				        android:id="@+id/com_kakao_login"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				      	android:layout_gravity="center|bottom"
+				        android:layout_marginBottom="30dp" />
+	</FrameLayout>
 </LinearLayout>
