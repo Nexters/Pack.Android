@@ -85,8 +85,10 @@ public class MainFragment extends BaseSherlockFragment implements OnMapClickList
         });
         
         // 액션바 페이딩을 위한
+        
         mActionBarBackgroundDrawable = activity.getResources().getDrawable(R.color.window_actionbar_background);
         activity.getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
+        /*
         mActionBarBackgroundDrawable.setAlpha(0);
         s.getViewTreeObserver().addOnScrollChangedListener(new OnScrollChangedListener() {
             @Override
@@ -101,6 +103,7 @@ public class MainFragment extends BaseSherlockFragment implements OnMapClickList
                 mActionBarBackgroundDrawable.setAlpha(newAlpha);
             }
         });
+        */
         
         initMap();
         return view;

@@ -5,11 +5,10 @@
 ### 7월 5주차
 
 #### 희조
-* - [ ] ActionBarDrawerToggle
+
 * - [ ] 개인 위치 가져와서 표시
 * - [ ] 마커 여러 이미지 적용, 커스터 마이징!
-* - [ ] 로그인 화면, 가입화면 완성
-* - [ ] 메인화면 xml 적용
+
 
 
 #### 재영
@@ -20,6 +19,9 @@
 * - [x] GCM 푸시
 * - [x] 카카오 프로필 업로드
 * - [ ] User Guest 등등 Model 클래스 작성
+* - [x] ActionBarDrawerToggle
+* - [x] 로그인 화면, 가입화면 완성
+* - [x] 메인화면 xml 적용
 
 ### 7월 4주차
 * - [x] KakaoLogin
@@ -42,3 +44,6 @@
 	* 카카오 개발자로 등록해야함
 	* 디버그키 등록해야함
 	* Release 할때 키 등록도 해야함
+- [GoogleMap](https://console.developers.google.com)
+    * keytool -list -v -keystore debug.keystore - sha1 값 가져오기
+    * Release 키도 등록해주기
