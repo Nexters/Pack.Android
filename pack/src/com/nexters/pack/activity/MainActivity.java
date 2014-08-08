@@ -49,8 +49,8 @@ public class MainActivity extends BaseSherlockFragmentActivity implements Search
 				GravityCompat.START);
 		
 		// Generate title
-		title = new String[] { "Title Fragment 1", "Title Fragment 2",
-				"Title Fragment 3" };
+		title = new String[] { "메인메뉴", "무슨화면?",
+				"무슨화면2" };
 
 		// Generate subtitle
 		subtitle = new String[] { "Subtitle Fragment 1", "Subtitle Fragment 2",

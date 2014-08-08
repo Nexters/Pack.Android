@@ -3,5 +3,7 @@
     <color name="window_background">#EEEEEE</color>
     <color name="window_actionbar_background">#6ca9e7</color>
     <color name="window_title_text">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="dark_white">#F5F5F5</color>
     <color name="transparent">#00000000</color>
 </resources>

@@ -30,10 +30,11 @@ public class APIResponseHandler extends JsonHttpResponseHandler {
 	public void onFinish() {}
 
 	@Override
-	public void onSuccess(JSONObject response) {}
-
+	public void onSuccess(JSONObject response){
+		
+	}
 	@Override
-	public final void onSuccess(int statusCode, JSONObject response) {
+	public void onSuccess(int statusCode, JSONObject response) {
 		App.log("HTTP  : " + response.toString());
 		String code = response.optString("status");
 		String message = response.optString("msg");

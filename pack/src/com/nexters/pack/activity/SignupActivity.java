@@ -2,8 +2,6 @@ package com.nexters.pack.activity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -14,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kakao.UserProfile;
-import com.loopj.android.http.*;
+import com.loopj.android.http.RequestParams;
 import com.nexters.pack.R;
 import com.nexters.pack.core.App;
 import com.nexters.pack.network.APIResponseHandler;

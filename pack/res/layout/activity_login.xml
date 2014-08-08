@@ -5,15 +5,23 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.nexters.pack.LoginActivity" >
+    
 	<FrameLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:layout_gravity="center" >
 		<ImageView
-	        android:id="@+id/splash_back"
+	        android:id="@+id/login_back"
 	        android:layout_width="match_parent"
 	        android:layout_height="match_parent"
-	        android:src="@drawable/splash_png"/>
+	        android:src="@drawable/splash_working"/>
+		<ImageView
+	        android:id="@+id/login_logo"
+	        android:layout_width="150dp"
+	        android:layout_height="150dp"
+	        android:layout_gravity="center"
+	        android:src="@drawable/trang_logo"
+	        />
 		
 	    <com.kakao.widget.LoginButton
 				        android:id="@+id/com_kakao_login"

@@ -70,8 +70,8 @@ public class App extends Application {
 	public static String getToken(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString("token", "");
     }
-	public static void setToken(Context context,String kakaoId) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("token", kakaoId).commit();
+	public static void setToken(Context context,String token) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("token", token).commit();
     }
     
 

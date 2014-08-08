@@ -7,13 +7,9 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.kakao.APIErrorResult;
@@ -112,8 +108,9 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(JSONObject response) {
             	String code = response.optString("status");
-                if(!TextUtils.isEmpty(code) && code.equals("0")){
+                if(!TextUtils.isEmpty(code) && code.equals("0") && response.optJSONObject("data") != null){
                 	// 회원가입 성공 & 카카오 아이디로 정보가져옴
+                	App.setToken(LoginActivity.this, response.optJSONObject("data").optString("token"));
                 	Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     setResult(RESULT_OK, null);

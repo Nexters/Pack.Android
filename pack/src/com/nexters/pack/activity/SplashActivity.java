@@ -6,13 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.View;
 import android.view.Window;
 
-import com.kakao.Session;
-import com.kakao.SessionCallback;
-import com.kakao.UserProfile;
-import com.kakao.exception.KakaoException;
 import com.loopj.android.http.RequestParams;
 import com.nexters.pack.R;
 import com.nexters.pack.core.App;

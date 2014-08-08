@@ -1,7 +1,7 @@
 package com.nexters.pack.util;
 
-import android.content.*;
-import android.util.*;
+import android.content.Context;
+import android.util.DisplayMetrics;
 // 뷰의 미니멈 높이를 설정해두었는데 px로 들어가서 모든 기기마다 많이 차이나는거..그래서 고치려고 이 함수 복붙.
 public class CommonUtil {
 	public static int dpToPx(Context context, int dp) {

@@ -5,7 +5,7 @@
     tools:context="com.nexters.pack.activity.SplashActivity" >
 
      <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/trang_logo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ci_trang"/>
