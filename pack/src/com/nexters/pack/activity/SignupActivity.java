@@ -3,6 +3,7 @@ package com.nexters.pack.activity;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -130,8 +131,7 @@ public class SignupActivity extends BaseSherlockActivity implements View.OnClick
             }
 
             @Override
-            public void onSuccess(JSONObject response) {
-            	super.onSuccess(response);
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             	App.setToken(SignupActivity.this, response.optJSONObject("data").optString("token"));
                 Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                 startActivity(intent);

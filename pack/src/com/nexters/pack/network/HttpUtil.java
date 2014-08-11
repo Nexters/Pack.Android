@@ -15,7 +15,9 @@ public class HttpUtil {
 		if(client == null) {
 			client = new AsyncHttpClient();
 		}
-		
+		client.setUserAgent(System.getProperty("http.agent"));
+		client.setTimeout(5000);
+		//client.setMaxRetriesAndTimeout(3, 5000);
 		return client;
 	}
 	

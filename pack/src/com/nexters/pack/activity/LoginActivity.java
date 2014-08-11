@@ -3,6 +3,7 @@ package com.nexters.pack.activity;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -106,7 +107,8 @@ public class LoginActivity extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            	super.onSuccess(statusCode, headers, response);
             	String code = response.optString("status");
                 if(!TextUtils.isEmpty(code) && code.equals("0") && response.optJSONObject("data") != null){
                 	// 회원가입 성공 & 카카오 아이디로 정보가져옴

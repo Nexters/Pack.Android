@@ -1,7 +1,7 @@
 package com.nexters.pack.activity;
 
 import java.util.Stack;
-
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,15 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.nexters.pack.R;
 import com.nexters.pack.adapter.MenuListAdapter;
+import com.nexters.pack.fragment.BaseFragment;
 import com.nexters.pack.fragment.BaseSherlockFragment;
 import com.nexters.pack.fragment.MainFragment;
 
+@SuppressLint("NewApi")
 public class MainActivity extends BaseSherlockFragmentActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
@@ -114,6 +115,23 @@ public class MainActivity extends BaseSherlockFragmentActivity implements Search
 		.addToBackStack(fragment.getName())
 		.replace(R.id.content_frame, fragment)
 		.commit();
+	}
+	@Override
+	public void onBackPressed() {
+		if(fragmentStack.size() > 0) {
+			BaseSherlockFragment fragment = fragmentStack.lastElement();
+			if(fragment.onBackPressed()) {
+				return;
+			}
+		}
+		if(drawerLayout != null && drawerLayout.isActivated()) {
+			drawerLayout.closeDrawers();
+		} else if(fragmentStack.size() > 1) {
+			fragmentStack.pop();
+			super.onBackPressed();
+		} else {
+			finish();
+		}
 	}
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {

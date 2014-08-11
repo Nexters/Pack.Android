@@ -1,5 +1,6 @@
 package com.nexters.pack.activity;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
@@ -53,8 +54,9 @@ public class SplashActivity extends BaseActivity {
 	                super.onFinish();
 	                hideLoading();
 	            }
+
 	            @Override
-	            public void onSuccess(JSONObject response) {
+	            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
 	            	String code = response.optString("status");
 	                if(!TextUtils.isEmpty(code) && code.equals("0") && response.optJSONObject("data") != null){
 	                	// 토큰으로 유저 정보 가져옴 -> 메인
@@ -73,12 +75,13 @@ public class SplashActivity extends BaseActivity {
 	private void goMain(){
 		Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
-        setResult(RESULT_OK, null);
+        setResult(RESULT_OK);
         finish();
 	}
 	private void goLogin(){
 		Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
+        setResult(RESULT_OK);
         finish();
 	}
 }
