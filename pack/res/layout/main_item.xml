@@ -27,6 +27,8 @@
 	        android:id="@+id/main_item_address_tv"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
+	        android:maxWidth="200dp"
+	        android:maxHeight="45dp"
 	        android:layout_marginTop="32dp"
 	        android:layout_marginLeft="20dp"        
 	        android:text="러쉘 스퀘어 도보 5분"
