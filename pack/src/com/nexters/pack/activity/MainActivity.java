@@ -1,12 +1,15 @@
 package com.nexters.pack.activity;
 
 import java.util.Stack;
+
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -16,29 +19,33 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.nexters.pack.R;
 import com.nexters.pack.adapter.MenuListAdapter;
-import com.nexters.pack.fragment.BaseFragment;
+import com.nexters.pack.core.App;
 import com.nexters.pack.fragment.BaseSherlockFragment;
 import com.nexters.pack.fragment.MainFragment;
+import com.nexters.pack.model.User;
+import com.nexters.pack.util.ImageManagingHelper;
 
 @SuppressLint("NewApi")
 public class MainActivity extends BaseSherlockFragmentActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener{
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
 	private MenuListAdapter menuAdapter;
+	private ImageView profileIV;
+	private LinearLayout drawerLinearLayout;
 	private ActionBarDrawerToggle drawerToggle;
 	private android.support.v4.app.FragmentManager fm;
 	private Stack<BaseSherlockFragment> fragmentStack = new Stack<BaseSherlockFragment>();
-	
-	String[] title;
-	String[] subtitle;
-	int[] icon;
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,21 +55,17 @@ public class MainActivity extends BaseSherlockFragmentActivity implements Search
 		drawerList = (ListView) findViewById(R.id.listview_drawer);
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-		
+		drawerLinearLayout = (LinearLayout) findViewById(R.id.drawer_ll);
+		profileIV = (ImageView) findViewById(R.id.profile_iv);
+		BitmapDrawable drawable = (BitmapDrawable) profileIV.getDrawable();
+		Bitmap bitmap = drawable.getBitmap();
+		profileIV.setImageBitmap(ImageManagingHelper.getCroppedBitmap(bitmap, 220));
+		//App.log("profile url : " + User.getInstance().getProfileURL());
+		//ImageManagingHelper.loadAndAttachCroppedImage(profileIV, User.getInstance().getProfileURL());
 		// Generate title
-		title = new String[] { "메인메뉴", "무슨화면?",
-				"무슨화면2" };
-
-		// Generate subtitle
-		subtitle = new String[] { "Subtitle Fragment 1", "Subtitle Fragment 2",
-				"Subtitle Fragment 3" };
-
-		// Generate icon
-		icon = new int[] { R.drawable.action_about, R.drawable.action_settings,
-				R.drawable.collections_cloud };
+		String[] title = new String[] { "홈", "환경설정"};
 				
-		menuAdapter = new MenuListAdapter(MainActivity.this, title, subtitle,
-				icon);
+		menuAdapter = new MenuListAdapter(MainActivity.this, title);
 		drawerList.setAdapter(menuAdapter);
 		getSupportActionBar().setHomeButtonEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -151,10 +154,10 @@ public class MainActivity extends BaseSherlockFragmentActivity implements Search
 		
 		if (item.getItemId() == android.R.id.home) {
 
-			if (drawerLayout.isDrawerOpen(drawerList)) {
-				drawerLayout.closeDrawer(drawerList);
+			if (drawerLayout.isDrawerOpen(drawerLinearLayout)) {
+				drawerLayout.closeDrawer(drawerLinearLayout);
 			} else {
-				drawerLayout.openDrawer(drawerList);
+				drawerLayout.openDrawer(drawerLinearLayout);
 			}
 		}
 		showShortToast("Click : " + item.getTitle());

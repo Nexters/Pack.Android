@@ -12,6 +12,7 @@ import android.view.Window;
 import com.loopj.android.http.RequestParams;
 import com.nexters.pack.R;
 import com.nexters.pack.core.App;
+import com.nexters.pack.model.User;
 import com.nexters.pack.network.APIResponseHandler;
 import com.nexters.pack.network.HttpUtil;
 import com.nexters.pack.network.URL;
@@ -57,10 +58,12 @@ public class SplashActivity extends BaseActivity {
 
 	            @Override
 	            public void onSuccess(int statusCode, Header[] headers, JSONObject response){
+	            	App.log(response + "");
 	            	String code = response.optString("status");
 	                if(!TextUtils.isEmpty(code) && code.equals("0") && response.optJSONObject("data") != null){
 	                	// 토큰으로 유저 정보 가져옴 -> 메인
 	                	App.setToken(SplashActivity.this, response.optJSONObject("data").optString("token"));
+	                	User.getInstance().setProfileURL(response.optJSONObject("data").optString("image"));
 	                	goMain();
 	                }else{
 	                	// 토큰정보없음 -> 로그인

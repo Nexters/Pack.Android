@@ -3,17 +3,12 @@
     style="?attr/spinnerDropDownItemStyle"
     android:layout_width="match_parent"
     android:layout_height="?attr/dropdownListPreferredItemHeight"
-    android:background="?android:attr/activatedBackgroundIndicator"
     android:orientation="horizontal" >
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true" />
+
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical|left"
         android:orientation="vertical" >
@@ -21,19 +16,14 @@
         <TextView
             android:id="@+id/title"
             style="?attr/spinnerDropDownItemStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true" />
-
-        <TextView
-            android:id="@+id/subtitle"
-            style="?attr/spinnerDropDownItemStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#919BA0"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceSmall" />
+            android:textSize="17sp"
+            android:gravity="center" />
+
     </LinearLayout>
 
 </LinearLayout>
